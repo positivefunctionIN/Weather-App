@@ -18,17 +18,20 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             WeatherAppTheme {
-                Scaffold(modifier = Modifier.fillMaxSize(), containerColor = MaterialTheme.colorScheme.background) { innerPadding ->
+                Scaffold(
+                    modifier = Modifier.fillMaxSize(),
+                    containerColor = MaterialTheme.colorScheme.background
+                ) { innerPadding ->
                     val viewModel: WeatherViewModel = viewModel()
-                    
+
                     WeatherScreen(
                         modifier = Modifier.padding(innerPadding),
                         weatherData = viewModel.weatherData.value,
+                        isLoading = viewModel.isLoading.value,
+                        errorMessage = viewModel.errorMessage.value,
                         onSearch = { city ->
                             viewModel.fetchWeather(city)
-                        },
-                        isLoading = viewModel.isLoading.value,     // Pass loading state
-                        errorMessage = viewModel.errorMessage.value // Pass error message state
+                        }
                     )
                 }
             }
