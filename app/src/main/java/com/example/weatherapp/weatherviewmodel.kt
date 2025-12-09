@@ -5,13 +5,13 @@ import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.weatherapp.network.FakeWeatherRepository
+import com.example.weatherapp.network.WeatherRepository
 import kotlinx.coroutines.launch
 
-class WeatherViewModel : ViewModel() { // Renamed to follow conventions
+class WeatherViewModel : ViewModel() { 
 
-    // Corrected the class name to match the import
-    private val repository = FakeWeatherRepository()
+    // Corrected instantiation: Use 'WeatherRepository' (uppercase W)
+    private val repository = WeatherRepository()
 
     // Private mutable state
     private val _weatherData = mutableStateOf(
@@ -48,6 +48,7 @@ class WeatherViewModel : ViewModel() { // Renamed to follow conventions
 
         viewModelScope.launch {
             try {
+                // Now using the real repository
                 val result = repository.getWeatherByCity(cityName)
 
                 result.fold(

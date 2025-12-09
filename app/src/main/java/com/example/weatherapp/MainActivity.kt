@@ -26,7 +26,9 @@ class MainActivity : ComponentActivity() {
                         weatherData = viewModel.weatherData.value,
                         onSearch = { city ->
                             viewModel.fetchWeather(city)
-                        }
+                        },
+                        isLoading = viewModel.isLoading.value,     // Pass loading state
+                        errorMessage = viewModel.errorMessage.value // Pass error message state
                     )
                 }
             }

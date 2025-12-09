@@ -15,6 +15,7 @@ import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Search
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.OutlinedTextField
@@ -42,7 +43,9 @@ import androidx.compose.ui.unit.sp
 fun WeatherScreen(
     modifier: Modifier = Modifier, 
     weatherData: WeatherData,
-    onSearch: (String) -> Unit // Added callback for search
+    onSearch: (String) -> Unit, 
+    isLoading: Boolean = false,
+    errorMessage: String? = null
 ) {
     val cityName = weatherData.city
     val temperature = weatherData.temperature
@@ -97,23 +100,34 @@ fun WeatherScreen(
                 }
             )
 
-            Spacer(modifier = Modifier.height(100.dp)) // Add some space between search and content
+            // Display Loading Indicator or Error Message
+            if(isLoading){
+                CircularProgressIndicator()
+                Text("Loading....", color = Color.Yellow)
+            } else if (errorMessage != null) {
+                Text(errorMessage, color = Color.Red)
+            } 
+
+            Spacer(modifier = Modifier.height(50.dp)) 
 
             // Weather Content
-            Text(text = cityName, fontSize = 40.sp, fontWeight = FontWeight.Bold)
-            Text(
-                text = "${temperature.toInt()}°C", 
-                fontSize = 48.sp
-            )
-            
-            Row(
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.Center
-            ) {
-                Text(text = condition, fontSize = 24.sp)
-
+            // Only show weather if not loading and no error
+            if (!isLoading && errorMessage == null) {
+                WeatherDetails(weatherData)
             }
         }
+    }
+}
+
+@Composable
+fun WeatherDetails(weatherData: WeatherData){
+    Column {
+        Text(weatherData.city)
+        Text(weatherData.temperature.toString())
+        Text(weatherData.condition)
+        Text(weatherData.humidity.toString())
+        Text(weatherData.windSpeed.toString())
+        Text(weatherData.icon)
     }
 }
 
